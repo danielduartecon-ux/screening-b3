@@ -1,0 +1,35 @@
+// Execução/backtest do 123 de compra
+// Entrada: rompimento da máxima do candle 3. Stop: mínima do candle 2. Alvo: 2x o risco.
+// Tipo de estratégia no Profit: Execução
+input
+  PerCurta(20);
+  PerLonga(72);
+  JanelaFundo(8);
+  Estrito(0);
+  AlvoR(2);
+var
+  mCurta, mLonga, entrada, stopPreco, alvo : float;
+begin
+  mCurta := Media(PerCurta, Close);
+  mLonga := Media(PerLonga, Close);
+
+  if not HasPosition then
+  begin
+    if (Low[1] < Low[2]) and (Low[1] < Low[0])
+       and (Low[1] <= Lowest(Low, JanelaFundo))
+       and ((Estrito = 0) or (Low[0] > Low[2]))
+       and (Close > mCurta) and (Close > mLonga) then
+    begin
+      entrada := High + 0.01;
+      stopPreco := Low[1] - 0.01;
+      alvo := entrada + AlvoR * (entrada - stopPreco);
+      BuyStop(entrada);
+    end;
+  end;
+
+  if IsBought then
+  begin
+    SellToCoverStop(stopPreco);
+    SellToCoverLimit(alvo);
+  end;
+end;

@@ -1,0 +1,23 @@
+// Screening 123 de compra em fundo, acima das médias 20 e 72
+// Tipo de estratégia no Profit: Screening
+input
+  PerCurta(20);
+  PerLonga(72);
+  JanelaFundo(8);     // candle 2 precisa ser a menor mínima desses N candles
+  Estrito(0);         // 1 = mínima do candle 3 também acima da do candle 1
+  VolFinMin(2000000); // volume financeiro médio mínimo (R$)
+var
+  mCurta, mLonga, volFin : float;
+begin
+  mCurta := Media(PerCurta, Close);
+  mLonga := Media(PerLonga, Close);
+  volFin := Media(20, Volume);
+
+  // Candle 1 = [2], candle 2 = [1] (o fundo), candle 3 = [0] (sinal)
+  if (Low[1] < Low[2]) and (Low[1] < Low[0])
+     and (Low[1] <= Lowest(Low, JanelaFundo))
+     and ((Estrito = 0) or (Low[0] > Low[2]))
+     and (Close > mCurta) and (Close > mLonga)
+     and (volFin >= VolFinMin) then
+    Select;
+end;

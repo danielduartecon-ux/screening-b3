@@ -81,3 +81,12 @@ pytest
 ```
 
 Isto é ferramenta de estudo, não recomendação de investimento.
+
+## Versão para o Profit Pro (NTSL)
+
+A pasta `profit/` tem a mesma lógica técnica escrita em NTSL, a linguagem do Profit:
+
+- `screening_123.ntsl`: cole numa estratégia do tipo **Screening** e rode na janela de Screening.
+- `execucao_123.ntsl`: estratégia de **Execução** para backtest (entrada no rompimento, stop na mínima do candle 2, alvo em 2R).
+
+O NTSL não tem os fundamentos (P/L, P/VP, ROE), então o filtro de "barata" continua no script Python.
