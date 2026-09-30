@@ -90,3 +90,22 @@ A pasta `profit/` tem a mesma lógica técnica escrita em NTSL, a linguagem do P
 - `execucao_123.ntsl`: estratégia de **Execução** para backtest (entrada no rompimento, stop na mínima do candle 2, alvo em 2R).
 
 O NTSL não tem os fundamentos (P/L, P/VP, ROE), então o filtro de "barata" continua no script Python.
+
+## Fundos imobiliários (FIIs)
+
+`fiis.py` tem duas funções:
+
+```bash
+python fiis.py ranking                                # FIIs que passam nos filtros, com nota
+python fiis.py aporte --valor 500                     # o que comprar nesta semana
+python fiis.py aporte --valor 500 --carteira carteira_fiis.csv
+```
+
+**Filtros do ranking:** liquidez diária ≥ R$ 1 mi, valor de mercado ≥ R$ 500 mi, P/VP entre 0,70 e 1,05,
+DY 12m entre 8% e 16%. Nos fundos de tijolo, também vacância ≤ 12% e pelo menos 5 imóveis.
+DY acima de 16% com P/VP lá embaixo quase sempre é crédito com problema, não pechincha, por isso fica de fora.
+
+**Aporte semanal:** você informa quanto vai investir e o script compra, uma cota por vez, o FII que
+estiver mais abaixo do peso-alvo. FII com P/VP acima de 1,10 fica de fora naquela semana.
+Na primeira vez ele cria `carteira_fiis.csv` com uma carteira sugerida (50% papel/híbrido, 50% tijolo).
+Edite os pesos como quiser e atualize a coluna `cotas` depois de cada compra.
